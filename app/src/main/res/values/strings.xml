@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">RecioXpenses</string>
+    <string name="today_btn_save">Save</string>
+    <string name="hint_start_capital">start capital</string>
+    <string name="hint_final_capital">final capital</string>
+    <string name="hint_expenses_capital">expenses</string>
+    <string name="today_status_new">Start a new day</string>
+    <string name="today_status_incomplete">Incomplete data collection</string>
+    <string name="today_status_complete">¡Great! You are up to date</string>
+    <string name="today_go_to_record">Record</string>
+    <string name="today_save_success">Data stored correctly.</string>
+    <string name="today_save_error">Failed to save.</string>
+    <string name="item_record_expenses">Expenses:\n$%.2f</string>
+    <string name="item_record_start_capital">Initial:$%.2f</string>
+    <string name="item_record_final_capital">Final:$%.2f</string>
+    <string name="record_query_error">Error, try later.</string>
+    <string name="menu_today">Today</string>
+    <string name="menu_record">Record</string>
+    <string name="description_user_image">User image</string>
+    <string name="main_auth_success">Welcome</string>
+    <string name="my_name">Edgar Manuel Velázquez Valdes</string>
+    <string name="unknown_error">Unknown bug.</string>
+</resources>

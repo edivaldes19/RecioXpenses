@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.edival.recioxpenses.ui.viewModel.TodayViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStartSave"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_padding_default"
+            android:text="@string/today_btn_save"
+            app:icon="@drawable/ic_save"
+            app:iconGravity="top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilStartCapital"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_padding_default"
+            android:hint="@string/hint_start_capital"
+            app:endIconMode="clear_text"
+            app:layout_constraintBottom_toBottomOf="@id/btnStartSave"
+            app:layout_constraintEnd_toStartOf="@id/btnStartSave"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btnStartSave">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etStartCapital"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"
+                app:textDecimal="@{viewModel.currentWorkDay.startCapital}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFinalSave"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_padding_default"
+            android:enabled="@{viewModel.currentWorkDay.startCapital > 0}"
+            android:text="@string/today_btn_save"
+            app:icon="@drawable/ic_save"
+            app:iconGravity="top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnStartSave" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilFinalCapital"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_padding_default"
+            android:hint="@string/hint_final_capital"
+            app:endIconMode="clear_text"
+            app:layout_constraintBottom_toBottomOf="@id/btnFinalSave"
+            app:layout_constraintEnd_toStartOf="@id/btnStartSave"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btnFinalSave">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etFinalCapital"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="@{viewModel.currentWorkDay.startCapital > 0}"
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"
+                app:textDecimal="@{viewModel.currentWorkDay.finalCapital}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnExpensesSave"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_padding_default"
+            android:enabled="@{viewModel.currentWorkDay.finalCapital > 0}"
+            android:text="@string/today_btn_save"
+            app:icon="@drawable/ic_save"
+            app:iconGravity="top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnFinalSave" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilExpenses"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_padding_default"
+            android:hint="@string/hint_expenses_capital"
+            app:endIconMode="clear_text"
+            app:layout_constraintBottom_toBottomOf="@id/btnExpensesSave"
+            app:layout_constraintEnd_toStartOf="@id/btnStartSave"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btnExpensesSave">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etExpenses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="@{viewModel.currentWorkDay.finalCapital > 0}"
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"
+                app:textDecimal="@{viewModel.currentWorkDay.expenses}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/today_status_new"
+            android:textAppearance="?attr/textAppearanceHeadline5"
+            app:layout_constraintBottom_toTopOf="@id/imgStatus"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilExpenses"
+            app:statusTodayMsg="@{viewModel.currentWorkDay.status}" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgStatus"
+            android:layout_width="@dimen/today_status_img_size"
+            android:layout_height="@dimen/today_status_img_size"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_history_toggle_off"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvStatus"
+            app:statusTodayImage="@{viewModel.currentWorkDay.status}" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:inProgressVisibility="@{viewModel.inProgress}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

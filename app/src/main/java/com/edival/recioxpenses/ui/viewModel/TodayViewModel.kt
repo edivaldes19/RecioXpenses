@@ -1,0 +1,61 @@
+package com.edival.recioxpenses.ui.viewModel
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.edival.recioxpenses.data.model.WorkDay
+import com.edival.recioxpenses.domain.model.Resource
+import com.edival.recioxpenses.domain.useCase.GetWorkDayByDayUseCase
+import com.edival.recioxpenses.domain.useCase.SaveWorkDayUseCase
+import com.edival.recioxpenses.ui.utils.UtilityFunctions
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class TodayViewModel @Inject constructor(
+        private val getWorkDayByDayUseCase: GetWorkDayByDayUseCase,
+        private val saveWorkDayUseCase: SaveWorkDayUseCase,
+        private val utils: UtilityFunctions
+) : ViewModel() {
+    private val _inProgress = MutableLiveData<Boolean>()
+    val inProgress: LiveData<Boolean> = _inProgress
+    private val _isHideKeyboard = MutableLiveData<Boolean>()
+    val isHideKeyboard: LiveData<Boolean> = _isHideKeyboard
+    private val _getWorkDayByDayRes = MutableLiveData<Resource<WorkDay>?>()
+    val getWorkDayByDayRes: LiveData<Resource<WorkDay>?> = _getWorkDayByDayRes
+    private val _saveWorkDayRes = MutableLiveData<Resource<Unit>?>()
+    val saveWorkDayRes: LiveData<Resource<Unit>?> = _saveWorkDayRes
+    val currentWorkDay = MutableLiveData<WorkDay>()
+
+    init {
+        viewModelScope.launch {
+            showLoadingComp(true)
+            getWorkDayByDayUseCase(utils.getToday()).collect { resource ->
+                _getWorkDayByDayRes.value = resource
+                showLoadingComp(false)
+            }
+        }
+    }
+
+    private fun showLoadingComp(isLoading: Boolean) {
+        _inProgress.value = isLoading
+        _isHideKeyboard.value = isLoading
+    }
+
+    fun cleanResources() {
+        _getWorkDayByDayRes.value = null
+        _saveWorkDayRes.value = null
+    }
+
+    fun saveWorkDay(startCapital: Double? = null, finalCapital: Double? = null, expenses: Double? = null): Job = viewModelScope.launch {
+        showLoadingComp(true)
+        saveWorkDayUseCase(utils.getToday(), startCapital, finalCapital, expenses, currentWorkDay.value
+                ?: WorkDay()).also { resource ->
+            _saveWorkDayRes.value = resource
+            showLoadingComp(false)
+        }
+    }
+}
