@@ -8,16 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.edival.recioxpenses.BR
 import com.edival.recioxpenses.R
-import com.edival.recioxpenses.data.model.WorkDay
 import com.edival.recioxpenses.databinding.FragmentRecordBinding
 import com.edival.recioxpenses.domain.model.Resource
 import com.edival.recioxpenses.ui.utils.showSnackBar
+import com.edival.recioxpenses.ui.utils.showToast
 import com.edival.recioxpenses.ui.viewModel.RecordViewModel
 import com.edival.recioxpenses.ui.views.record.adapters.OnRecordListener
 import com.edival.recioxpenses.ui.views.record.adapters.RecordAdapter
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -38,7 +39,7 @@ class RecordFragment : Fragment(), OnRecordListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewModel()
-        setupRecyclerView()
+        setupRecyclerView(view.context)
         setupObservers(view, view.context)
     }
 
@@ -48,10 +49,13 @@ class RecordFragment : Fragment(), OnRecordListener {
         binding.setVariable(BR.viewModel, vm)
     }
 
-    private fun setupRecyclerView() {
+    private fun setupRecyclerView(ctx: Context) {
         binding.recyclerView.apply {
             setHasFixedSize(true)
             adapter = this@RecordFragment.recordAdapter
+            layoutManager = LinearLayoutManager(ctx).also { manager ->
+                addItemDecoration(DividerItemDecoration(ctx, manager.orientation))
+            }
         }.also { recordAdapter.setOnClickListener(this) }
     }
 
@@ -63,8 +67,14 @@ class RecordFragment : Fragment(), OnRecordListener {
                     is Resource.Success -> recordAdapter.submitList(resource.data)
                     is Resource.Error -> view.showSnackBar(resource.message
                             ?: ctx.getString(R.string.record_query_error))
-
-                    else -> resource?.let { view.showSnackBar(ctx.getString(R.string.unknown_error)) }
+                }
+            }
+            vm.deleteWorkDayRes.observe(viewLifecycleOwner) { resource ->
+                Log.i("deleteWorkDayRes", "$resource")
+                when (resource) {
+                    is Resource.Success -> ctx.showToast(R.string.record_delete_success)
+                    is Resource.Error -> view.showSnackBar(resource.message
+                            ?: ctx.getString(R.string.record_query_error))
                 }
             }
         }
@@ -72,11 +82,14 @@ class RecordFragment : Fragment(), OnRecordListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.viewModel?.cleanResources()
         _binding = null
     }
 
-    override fun onClick(workDay: WorkDay) {
-        Snackbar.make(binding.root, workDay.uid, Snackbar.LENGTH_SHORT).show()
+    override fun onClick(day: String) {
+        binding.root.showSnackBar(day)
+    }
+
+    override fun onDelete(day: String) {
+        binding.viewModel?.deleteWorkDay(day)
     }
 }

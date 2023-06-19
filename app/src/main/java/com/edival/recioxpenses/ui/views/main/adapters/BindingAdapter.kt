@@ -1,19 +1,11 @@
-package com.edival.recioxpenses.ui
+package com.edival.recioxpenses.ui.views.main.adapters
 
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.edival.recioxpenses.R
-
-@BindingAdapter("glideUrl")
-fun bindLoadImage(view: ImageView, url: String) {
-    Glide.with(view.context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).centerCrop()
-            .circleCrop().error(R.drawable.ic_account_circle).into(view)
-}
 
 @BindingAdapter("statusTodayImage")
 fun bindImageStatus(view: ImageView, status: Int) {

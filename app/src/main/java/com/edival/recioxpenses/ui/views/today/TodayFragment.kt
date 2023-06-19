@@ -54,8 +54,6 @@ class TodayFragment : Fragment() {
                     is Resource.Success -> vm.currentWorkDay.value = resource.data
                     is Resource.Error -> view.showSnackBar(resource.message
                             ?: ctx.getString(R.string.record_query_error))
-
-                    else -> resource?.let { view.showSnackBar(ctx.getString(R.string.unknown_error)) }
                 }
             }
             vm.saveWorkDayRes.observe(viewLifecycleOwner) { resource ->
@@ -64,8 +62,6 @@ class TodayFragment : Fragment() {
                     is Resource.Success -> ctx.showToast(R.string.today_save_success)
                     is Resource.Error -> view.showSnackBar(resource.message
                             ?: ctx.getString(R.string.unknown_error))
-
-                    else -> resource?.let { view.showSnackBar(ctx.getString(R.string.unknown_error)) }
                 }
             }
             vm.isHideKeyboard.observe(viewLifecycleOwner) { isHide ->
@@ -91,7 +87,6 @@ class TodayFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.viewModel?.cleanResources()
         _binding = null
     }
 }

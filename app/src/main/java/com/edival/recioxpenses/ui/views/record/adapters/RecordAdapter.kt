@@ -43,7 +43,15 @@ class RecordAdapter @Inject constructor(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = DataBindingUtil.bind<ItemRecordBinding>(view)
         fun setListener(workDay: WorkDay) {
-            binding?.root?.setOnClickListener { listener.onClick(workDay) }
+            binding?.let { item ->
+                with(item.root) {
+                    setOnClickListener { listener.onClick(workDay.idWorkDay) }
+                    setOnLongClickListener {
+                        listener.onDelete(workDay.idWorkDay)
+                        true
+                    }
+                }
+            }
         }
     }
 }

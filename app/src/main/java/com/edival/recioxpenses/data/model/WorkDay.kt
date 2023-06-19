@@ -5,7 +5,7 @@ import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.ServerTimestamp
 
 data class WorkDay(
-        @get:Exclude var uid: String = "",
+        @get:Exclude var idWorkDay: String = "",
         @ServerTimestamp var date: Timestamp? = null,
         var startCapital: Double = 0.0,
         var finalCapital: Double = 0.0,

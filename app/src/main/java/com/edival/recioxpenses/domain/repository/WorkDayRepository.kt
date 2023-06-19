@@ -16,4 +16,6 @@ interface WorkDayRepository {
             expenses: Double?,
             workDay: WorkDay
     ): Resource<Unit>
+
+    suspend fun deleteWorkDay(day: String): Resource<Unit>
 }
