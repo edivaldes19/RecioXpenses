@@ -27,7 +27,7 @@ class TodayFragment : Fragment() {
     @Inject
     lateinit var utils: UtilityFunctions
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTodayBinding.inflate(inflater, container, false)
         return binding.root
@@ -52,16 +52,20 @@ class TodayFragment : Fragment() {
                 Log.i("getWorkDayByDayRes", "$resource")
                 when (resource) {
                     is Resource.Success -> vm.currentWorkDay.value = resource.data
-                    is Resource.Error -> view.showSnackBar(resource.message
-                            ?: ctx.getString(R.string.record_query_error))
+                    is Resource.Error -> view.showSnackBar(
+                        resource.message
+                            ?: ctx.getString(R.string.record_query_error)
+                    )
                 }
             }
             vm.saveWorkDayRes.observe(viewLifecycleOwner) { resource ->
                 Log.i("saveWorkDayRes", "$resource")
                 when (resource) {
                     is Resource.Success -> ctx.showToast(R.string.today_save_success)
-                    is Resource.Error -> view.showSnackBar(resource.message
-                            ?: ctx.getString(R.string.unknown_error))
+                    is Resource.Error -> view.showSnackBar(
+                        resource.message
+                            ?: ctx.getString(R.string.unknown_error)
+                    )
                 }
             }
             vm.isHideKeyboard.observe(viewLifecycleOwner) { isHide ->
@@ -72,16 +76,12 @@ class TodayFragment : Fragment() {
     }
 
     private fun setupButtons() {
-        with(binding) {
-            btnStartSave.setOnClickListener {
-                viewModel?.saveWorkDay(startCapital = etStartCapital.text.toString().toDoubleOrNull())
-            }
-            btnFinalSave.setOnClickListener {
-                viewModel?.saveWorkDay(finalCapital = etFinalCapital.text.toString().toDoubleOrNull())
-            }
-            btnExpensesSave.setOnClickListener {
-                viewModel?.saveWorkDay(expenses = etExpenses.text.toString().toDoubleOrNull())
-            }
+        binding.btnSave.setOnClickListener {
+            binding.viewModel?.saveWorkDay(
+                startCapital = binding.etStartCapital.text.toString().toDoubleOrNull(),
+                finalCapital = binding.etFinalCapital.text.toString().toDoubleOrNull(),
+                expenses = binding.etExpenses.text.toString().toDoubleOrNull()
+            )
         }
     }
 

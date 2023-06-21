@@ -10,11 +10,11 @@ interface WorkDayRepository {
     fun getEverydayWork(): Flow<Resource<List<WorkDay>>>
     fun getWorkDayByDay(today: String): Flow<Resource<WorkDay>>
     suspend fun saveWorkDay(
-            day: String,
-            startCapital: Double?,
-            finalCapital: Double?,
-            expenses: Double?,
-            workDay: WorkDay
+        day: String,
+        startCapital: Double?,
+        finalCapital: Double?,
+        expenses: Double?,
+        workDay: WorkDay
     ): Resource<Unit>
 
     suspend fun deleteWorkDay(day: String): Resource<Unit>

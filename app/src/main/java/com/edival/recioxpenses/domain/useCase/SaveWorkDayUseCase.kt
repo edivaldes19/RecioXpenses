@@ -7,11 +7,11 @@ import javax.inject.Inject
 
 class SaveWorkDayUseCase @Inject constructor(private val workDayRepository: WorkDayRepository) {
     suspend operator fun invoke(
-            day: String,
-            startCapital: Double?,
-            finalCapital: Double?,
-            expenses: Double?,
-            workDay: WorkDay
+        day: String,
+        startCapital: Double?,
+        finalCapital: Double?,
+        expenses: Double?,
+        workDay: WorkDay
     ): Resource<Unit> {
         return workDayRepository.saveWorkDay(day, startCapital, finalCapital, expenses, workDay)
     }

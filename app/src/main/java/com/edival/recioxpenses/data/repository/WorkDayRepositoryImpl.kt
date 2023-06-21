@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class WorkDayRepositoryImpl @Inject constructor(private val db: FirebaseFirestore) : WorkDayRepository {
+class WorkDayRepositoryImpl @Inject constructor(private val db: FirebaseFirestore) :
+    WorkDayRepository {
     override val daysCollection: CollectionReference get() = db.collection(Constants.COLL_DAYS)
     override fun getEverydayWork(): Flow<Resource<List<WorkDay>>> {
         return daysCollection.snapshots().mapNotNull { snapshot ->
@@ -28,19 +29,25 @@ class WorkDayRepositoryImpl @Inject constructor(private val db: FirebaseFirestor
         return daysCollection.document(today).snapshots().mapNotNull { snapshot ->
             if (snapshot.exists()) {
                 Resource.Success(snapshot.toObject<WorkDay>()!!.apply { idWorkDay = snapshot.id })
-            } else Resource.Error()
+            } else Resource.Success(WorkDay())
         }
     }
 
-    override suspend fun saveWorkDay(day: String, startCapital: Double?, finalCapital: Double?, expenses: Double?, workDay: WorkDay): Resource<Unit> {
+    override suspend fun saveWorkDay(
+        day: String,
+        startCapital: Double?,
+        finalCapital: Double?,
+        expenses: Double?,
+        workDay: WorkDay
+    ): Resource<Unit> {
         return try {
             startCapital?.let { workDay.startCapital = it }
             finalCapital?.let { workDay.finalCapital = it }
             expenses?.let { workDay.expenses = it }
             daysCollection.document(day).set(workDay).await()
             Resource.Success(Unit)
-        } catch (e: FirebaseFirestoreException) {
-            Resource.Error(e.message)
+        } catch (error: FirebaseFirestoreException) {
+            Resource.Error(error.message)
         }
     }
 
@@ -48,8 +55,8 @@ class WorkDayRepositoryImpl @Inject constructor(private val db: FirebaseFirestor
         return try {
             daysCollection.document(day).delete().await()
             Resource.Success(Unit)
-        } catch (e: FirebaseFirestoreException) {
-            Resource.Error(e.message)
+        } catch (error: FirebaseFirestoreException) {
+            Resource.Error(error.message)
         }
     }
 }

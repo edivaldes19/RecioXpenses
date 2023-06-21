@@ -17,9 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodayViewModel @Inject constructor(
-        private val getWorkDayByDayUseCase: GetWorkDayByDayUseCase,
-        private val saveWorkDayUseCase: SaveWorkDayUseCase,
-        private val utils: UtilityFunctions
+    private val getWorkDayByDayUseCase: GetWorkDayByDayUseCase,
+    private val saveWorkDayUseCase: SaveWorkDayUseCase,
+    private val utils: UtilityFunctions
 ) : ViewModel() {
     private val _inProgress = MutableLiveData<Boolean>()
     val inProgress: LiveData<Boolean> = _inProgress
@@ -35,13 +35,13 @@ class TodayViewModel @Inject constructor(
         viewModelScope.launch {
             showLoadingComp(true)
             getWorkDayByDayUseCase(utils.getToday())
-                    .catch { error ->
-                        _getWorkDayByDayRes.value = Resource.Error(error.message)
-                        showLoadingComp(false)
-                    }.collect { resource ->
-                        _getWorkDayByDayRes.value = resource
-                        showLoadingComp(false)
-                    }
+                .catch { error ->
+                    _getWorkDayByDayRes.value = Resource.Error(error.message)
+                    showLoadingComp(false)
+                }.collect { resource ->
+                    _getWorkDayByDayRes.value = resource
+                    showLoadingComp(false)
+                }
         }
     }
 
@@ -50,10 +50,16 @@ class TodayViewModel @Inject constructor(
         _isHideKeyboard.value = isLoading
     }
 
-    fun saveWorkDay(startCapital: Double? = null, finalCapital: Double? = null, expenses: Double? = null): Job = viewModelScope.launch {
+    fun saveWorkDay(
+        startCapital: Double? = null,
+        finalCapital: Double? = null,
+        expenses: Double? = null
+    ): Job = viewModelScope.launch {
         showLoadingComp(true)
-        saveWorkDayUseCase(utils.getToday(), startCapital, finalCapital, expenses, currentWorkDay.value
-                ?: WorkDay()).also { resource ->
+        saveWorkDayUseCase(
+            utils.getToday(), startCapital, finalCapital, expenses, currentWorkDay.value
+                ?: WorkDay()
+        ).also { resource ->
             _saveWorkDayRes.value = resource
             showLoadingComp(false)
         }

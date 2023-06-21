@@ -7,5 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetWorkDayByDayUseCase @Inject constructor(private val workDayRepository: WorkDayRepository) {
-    operator fun invoke(today: String): Flow<Resource<WorkDay>> = workDayRepository.getWorkDayByDay(today)
+    operator fun invoke(today: String): Flow<Resource<WorkDay>> =
+        workDayRepository.getWorkDayByDay(today)
 }

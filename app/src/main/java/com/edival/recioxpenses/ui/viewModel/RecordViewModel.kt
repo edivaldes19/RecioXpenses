@@ -15,8 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecordViewModel @Inject constructor(
-        private val getEverydayWorkUseCase: GetEverydayWorkUseCase,
-        private val deleteWorkDayUseCase: DeleteWorkDayUseCase,
+    private val getEverydayWorkUseCase: GetEverydayWorkUseCase,
+    private val deleteWorkDayUseCase: DeleteWorkDayUseCase,
 ) : ViewModel() {
     private val _inProgress = MutableLiveData<Boolean>()
     val inProgress: LiveData<Boolean> = _inProgress
@@ -29,13 +29,13 @@ class RecordViewModel @Inject constructor(
         viewModelScope.launch {
             _inProgress.value = true
             getEverydayWorkUseCase()
-                    .catch { error ->
-                        _getEverydayWorkRes.value = Resource.Error(error.message)
-                        _inProgress.value = false
-                    }.collect { resource ->
-                        _getEverydayWorkRes.value = resource
-                        _inProgress.value = false
-                    }
+                .catch { error ->
+                    _getEverydayWorkRes.value = Resource.Error(error.message)
+                    _inProgress.value = false
+                }.collect { resource ->
+                    _getEverydayWorkRes.value = resource
+                    _inProgress.value = false
+                }
         }
     }
 

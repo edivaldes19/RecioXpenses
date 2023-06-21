@@ -30,7 +30,7 @@ class RecordFragment : Fragment(), OnRecordListener {
     @Inject
     lateinit var recordAdapter: RecordAdapter
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRecordBinding.inflate(inflater, container, false)
         return binding.root
@@ -65,16 +65,20 @@ class RecordFragment : Fragment(), OnRecordListener {
                 Log.i("getEverydayWorkRes", "$resource")
                 when (resource) {
                     is Resource.Success -> recordAdapter.submitList(resource.data)
-                    is Resource.Error -> view.showSnackBar(resource.message
-                            ?: ctx.getString(R.string.record_query_error))
+                    is Resource.Error -> view.showSnackBar(
+                        resource.message
+                            ?: ctx.getString(R.string.record_query_error)
+                    )
                 }
             }
             vm.deleteWorkDayRes.observe(viewLifecycleOwner) { resource ->
                 Log.i("deleteWorkDayRes", "$resource")
                 when (resource) {
                     is Resource.Success -> ctx.showToast(R.string.record_delete_success)
-                    is Resource.Error -> view.showSnackBar(resource.message
-                            ?: ctx.getString(R.string.record_query_error))
+                    is Resource.Error -> view.showSnackBar(
+                        resource.message
+                            ?: ctx.getString(R.string.record_query_error)
+                    )
                 }
             }
         }
