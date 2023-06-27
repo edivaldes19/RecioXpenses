@@ -4,18 +4,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.edival.recioxpenses.BR
 import com.edival.recioxpenses.R
 import com.edival.recioxpenses.data.model.WorkDay
 import com.edival.recioxpenses.databinding.ItemRecordBinding
-import com.edival.recioxpenses.ui.utils.UtilityFunctions
+import com.edival.recioxpenses.domain.useCase.FormatDateUseCase
 import javax.inject.Inject
 
 class RecordAdapter @Inject constructor(
-    private val utils: UtilityFunctions, diff: WorkDayDiff
+    private val formatDateUseCase: FormatDateUseCase,
+    diff: WorkDayDiff
 ) : ListAdapter<WorkDay, RecyclerView.ViewHolder>(diff) {
     private lateinit var listener: OnRecordListener
     fun setOnClickListener(listener: OnRecordListener) {
@@ -29,14 +29,14 @@ class RecordAdapter @Inject constructor(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        getItem(position).also { workDay ->
-            with(holder as RecordViewHolder) {
-                setListener(workDay)
-                binding?.let { view ->
-                    view.setVariable(BR.workDay, workDay)
-                    view.setVariable(BR.utils, utils)
-                    view.executePendingBindings()
-                }
+        val workDay = getItem(position)
+        val date = workDay.date?.let { timestamp -> formatDateUseCase(timestamp.toDate()) }
+        with(holder as RecordViewHolder) {
+            setListener(workDay)
+            binding?.let { view ->
+                view.setVariable(BR.date, date)
+                view.setVariable(BR.workDay, workDay)
+                view.executePendingBindings()
             }
         }
     }
@@ -45,21 +45,12 @@ class RecordAdapter @Inject constructor(
         val binding = DataBindingUtil.bind<ItemRecordBinding>(view)
         fun setListener(workDay: WorkDay) {
             binding?.let { item ->
-                with(item.root) {
-                    setOnClickListener { listener.onClick(workDay.idWorkDay) }
-                    setOnLongClickListener {
-                        listener.onDelete(workDay.idWorkDay)
-                        true
-                    }
+                item.root.setOnClickListener { listener.onClick(workDay.idWorkDay) }
+                item.root.setOnLongClickListener {
+                    listener.onDelete(workDay.idWorkDay)
+                    true
                 }
             }
         }
     }
-}
-
-class WorkDayDiff : DiffUtil.ItemCallback<WorkDay>() {
-    override fun areItemsTheSame(oldItem: WorkDay, newItem: WorkDay) =
-        oldItem.idWorkDay == newItem.idWorkDay
-
-    override fun areContentsTheSame(oldItem: WorkDay, newItem: WorkDay) = oldItem == newItem
 }

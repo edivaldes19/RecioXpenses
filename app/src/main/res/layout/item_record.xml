@@ -6,26 +6,27 @@
     <data>
 
         <variable
-            name="workDay"
-            type="com.edival.recioxpenses.data.model.WorkDay" />
+            name="date"
+            type="String" />
 
         <variable
-            name="utils"
-            type="com.edival.recioxpenses.ui.utils.UtilityFunctions" />
+            name="workDay"
+            type="com.edival.recioxpenses.data.model.WorkDay" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/common_padding_default">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_padding_default"
-            android:text="@{utils.getFormatDate(workDay.date.toDate())}"
-            android:textAppearance="?attr/textAppearanceSubtitle2"
+            android:text="@{date}"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvStartCapital"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="19/12/1999" />
@@ -34,12 +35,11 @@
             android:id="@+id/tvExpenses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/common_padding_default"
             android:minEms="5"
             android:text="@{@string/item_record_expenses(workDay.expenses)}"
-            android:textAppearance="?attr/textAppearanceBody2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvStartCapital"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Gastos:\n$2500.0" />
 
@@ -49,7 +49,6 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/common_padding_default"
             android:text="@{@string/item_record_start_capital(workDay.startCapital)}"
-            android:textAppearance="?attr/textAppearanceBody2"
             app:layout_constraintBottom_toTopOf="@id/tvFinalCapital"
             app:layout_constraintEnd_toStartOf="@id/tvExpenses"
             app:layout_constraintStart_toEndOf="@id/tvDate"
@@ -61,7 +60,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{@string/item_record_final_capital(workDay.finalCapital)}"
-            android:textAppearance="?attr/textAppearanceBody2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tvStartCapital"
             app:layout_constraintStart_toStartOf="@id/tvStartCapital"

@@ -1,7 +1,6 @@
 package com.edival.recioxpenses.ui.views.main.adapters
 
 import android.view.View
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -11,9 +10,9 @@ import com.edival.recioxpenses.R
 fun bindImageStatus(view: ImageView, status: Int) {
     view.setImageResource(
         when (status) {
-            1, 2 -> R.drawable.ic_access_time_filled
-            3 -> R.drawable.ic_check_circle
-            else -> R.drawable.ic_history_toggle_off
+            1, 2 -> R.drawable.outline_access_time
+            3 -> R.drawable.outline_check
+            else -> R.drawable.outline_history
         }
     )
 }
@@ -32,9 +31,4 @@ fun bindMsgStatus(view: TextView, status: Int) {
 @BindingAdapter("inProgressVisibility")
 fun bindSetVisibility(view: View, inProgress: Boolean) {
     view.visibility = if (inProgress) View.VISIBLE else View.GONE
-}
-
-@BindingAdapter("textDecimal")
-fun bindTextDecimal(view: EditText, value: Double) {
-    view.setText(if (value == 0.0) "" else value.toString())
 }

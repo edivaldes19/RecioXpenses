@@ -1,5 +1,6 @@
 package com.edival.recioxpenses.ui.viewModel
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,8 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.edival.recioxpenses.data.model.WorkDay
 import com.edival.recioxpenses.domain.model.Resource
 import com.edival.recioxpenses.domain.useCase.GetWorkDayByDayUseCase
+import com.edival.recioxpenses.domain.useCase.HideKeyboardUseCase
 import com.edival.recioxpenses.domain.useCase.SaveWorkDayUseCase
-import com.edival.recioxpenses.ui.utils.UtilityFunctions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
@@ -19,7 +20,7 @@ import javax.inject.Inject
 class TodayViewModel @Inject constructor(
     private val getWorkDayByDayUseCase: GetWorkDayByDayUseCase,
     private val saveWorkDayUseCase: SaveWorkDayUseCase,
-    private val utils: UtilityFunctions
+    private val hideKeyboardUseCase: HideKeyboardUseCase
 ) : ViewModel() {
     private val _inProgress = MutableLiveData<Boolean>()
     val inProgress: LiveData<Boolean> = _inProgress
@@ -34,7 +35,7 @@ class TodayViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             showLoadingComp(true)
-            getWorkDayByDayUseCase(utils.getToday())
+            getWorkDayByDayUseCase()
                 .catch { error ->
                     _getWorkDayByDayRes.value = Resource.Error(error.message)
                     showLoadingComp(false)
@@ -57,11 +58,17 @@ class TodayViewModel @Inject constructor(
     ): Job = viewModelScope.launch {
         showLoadingComp(true)
         saveWorkDayUseCase(
-            utils.getToday(), startCapital, finalCapital, expenses, currentWorkDay.value
-                ?: WorkDay()
+            startCapital,
+            finalCapital,
+            expenses,
+            currentWorkDay.value ?: WorkDay()
         ).also { resource ->
             _saveWorkDayRes.value = resource
             showLoadingComp(false)
         }
+    }
+
+    fun hideKeyboard(view: View) {
+        hideKeyboardUseCase(view)
     }
 }

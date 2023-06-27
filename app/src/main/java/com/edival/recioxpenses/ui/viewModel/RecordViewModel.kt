@@ -9,6 +9,7 @@ import com.edival.recioxpenses.domain.model.Resource
 import com.edival.recioxpenses.domain.useCase.DeleteWorkDayUseCase
 import com.edival.recioxpenses.domain.useCase.GetEverydayWorkUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,7 +40,7 @@ class RecordViewModel @Inject constructor(
         }
     }
 
-    fun deleteWorkDay(day: String) = viewModelScope.launch {
+    fun deleteWorkDay(day: String): Job = viewModelScope.launch {
         _inProgress.value = true
         deleteWorkDayUseCase(day).also { resource ->
             _deleteWorkDayRes.value = resource

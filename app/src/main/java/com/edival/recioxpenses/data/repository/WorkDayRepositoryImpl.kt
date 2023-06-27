@@ -3,7 +3,6 @@ package com.edival.recioxpenses.data.repository
 import com.edival.recioxpenses.data.model.WorkDay
 import com.edival.recioxpenses.domain.model.Resource
 import com.edival.recioxpenses.domain.repository.WorkDayRepository
-import com.edival.recioxpenses.ui.utils.Constants
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 class WorkDayRepositoryImpl @Inject constructor(private val db: FirebaseFirestore) :
     WorkDayRepository {
-    override val daysCollection: CollectionReference get() = db.collection(Constants.COLL_DAYS)
+    override val daysCollection: CollectionReference get() = db.collection("Days")
     override fun getEverydayWork(): Flow<Resource<List<WorkDay>>> {
         return daysCollection.snapshots().mapNotNull { snapshot ->
             snapshot.mapNotNull { documentSnapshot ->
@@ -25,7 +24,7 @@ class WorkDayRepositoryImpl @Inject constructor(private val db: FirebaseFirestor
         }
     }
 
-    override fun getWorkDayByDay(today: String): Flow<Resource<WorkDay>> {
+    override fun getWorkDayByToday(today: String): Flow<Resource<WorkDay>> {
         return daysCollection.document(today).snapshots().mapNotNull { snapshot ->
             if (snapshot.exists()) {
                 Resource.Success(snapshot.toObject<WorkDay>()!!.apply { idWorkDay = snapshot.id })
@@ -34,7 +33,7 @@ class WorkDayRepositoryImpl @Inject constructor(private val db: FirebaseFirestor
     }
 
     override suspend fun saveWorkDay(
-        day: String,
+        today: String,
         startCapital: Double?,
         finalCapital: Double?,
         expenses: Double?,
@@ -44,7 +43,7 @@ class WorkDayRepositoryImpl @Inject constructor(private val db: FirebaseFirestor
             startCapital?.let { workDay.startCapital = it }
             finalCapital?.let { workDay.finalCapital = it }
             expenses?.let { workDay.expenses = it }
-            daysCollection.document(day).set(workDay).await()
+            daysCollection.document(today).set(workDay).await()
             Resource.Success(Unit)
         } catch (error: FirebaseFirestoreException) {
             Resource.Error(error.message)

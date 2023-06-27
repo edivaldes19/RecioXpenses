@@ -12,20 +12,15 @@ import com.edival.recioxpenses.BR
 import com.edival.recioxpenses.R
 import com.edival.recioxpenses.databinding.FragmentTodayBinding
 import com.edival.recioxpenses.domain.model.Resource
-import com.edival.recioxpenses.ui.utils.UtilityFunctions
 import com.edival.recioxpenses.ui.utils.showSnackBar
 import com.edival.recioxpenses.ui.utils.showToast
 import com.edival.recioxpenses.ui.viewModel.TodayViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class TodayFragment : Fragment() {
     private var _binding: FragmentTodayBinding? = null
     private val binding get() = _binding!!
-
-    @Inject
-    lateinit var utils: UtilityFunctions
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -70,7 +65,7 @@ class TodayFragment : Fragment() {
             }
             vm.isHideKeyboard.observe(viewLifecycleOwner) { isHide ->
                 Log.i("isHideKeyboard", "$isHide")
-                if (isHide) utils.hideKeyboard(view)
+                if (isHide) vm.hideKeyboard(view)
             }
         }
     }

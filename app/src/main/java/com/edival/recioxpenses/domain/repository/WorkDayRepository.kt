@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 interface WorkDayRepository {
     val daysCollection: CollectionReference
     fun getEverydayWork(): Flow<Resource<List<WorkDay>>>
-    fun getWorkDayByDay(today: String): Flow<Resource<WorkDay>>
+    fun getWorkDayByToday(today: String): Flow<Resource<WorkDay>>
     suspend fun saveWorkDay(
-        day: String,
+        today: String,
         startCapital: Double?,
         finalCapital: Double?,
         expenses: Double?,

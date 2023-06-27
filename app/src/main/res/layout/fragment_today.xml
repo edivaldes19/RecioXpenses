@@ -17,6 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/common_padding_default"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -24,7 +25,6 @@
                 android:id="@+id/tilStartCapital"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/common_padding_default"
                 android:hint="@string/hint_start_capital"
                 android:maxLength="10"
                 app:counterEnabled="true"
@@ -35,17 +35,18 @@
                     android:id="@+id/etStartCapital"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
+                    android:imeOptions="actionNext"
                     android:inputType="numberDecimal"
                     android:maxLength="10"
-                    app:textDecimal="@{viewModel.currentWorkDay.startCapital}" />
+                    android:nextFocusForward="@id/etFinalCapital"
+                    android:text="@{String.valueOf(viewModel.currentWorkDay.startCapital)}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilFinalCapital"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/common_padding_default"
+                android:layout_marginTop="@dimen/common_padding_min"
                 android:hint="@string/hint_final_capital"
                 android:maxLength="10"
                 app:counterEnabled="true"
@@ -56,18 +57,18 @@
                     android:id="@+id/etFinalCapital"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="@{viewModel.currentWorkDay.startCapital > 0}"
                     android:imeOptions="actionNext"
                     android:inputType="numberDecimal"
                     android:maxLength="10"
-                    app:textDecimal="@{viewModel.currentWorkDay.finalCapital}" />
+                    android:nextFocusForward="@id/etExpenses"
+                    android:text="@{String.valueOf(viewModel.currentWorkDay.finalCapital)}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilExpenses"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/common_padding_default"
+                android:layout_marginTop="@dimen/common_padding_min"
                 android:hint="@string/hint_expenses_capital"
                 android:maxLength="10"
                 app:counterEnabled="true"
@@ -78,19 +79,18 @@
                     android:id="@+id/etExpenses"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="@{viewModel.currentWorkDay.finalCapital > 0}"
                     android:imeOptions="actionDone"
                     android:inputType="numberDecimal"
                     android:maxLength="10"
-                    app:textDecimal="@{viewModel.currentWorkDay.expenses}" />
+                    android:text="@{String.valueOf(viewModel.currentWorkDay.expenses)}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/common_padding_default"
-                android:enabled="@{viewModel.currentWorkDay.expenses > 0}"
+                android:layout_marginTop="@dimen/common_padding_min"
+                android:enabled="@{!viewModel.inProgress}"
                 android:text="@string/today_btn_save"
                 app:icon="@drawable/ic_save" />
 
@@ -98,7 +98,7 @@
                 android:id="@+id/tvStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/common_padding_default"
+                android:layout_marginTop="@dimen/common_padding_min"
                 android:text="@string/today_status_new"
                 android:textAppearance="?attr/textAppearanceHeadline5"
                 app:statusTodayMsg="@{viewModel.currentWorkDay.status}" />
@@ -107,15 +107,15 @@
                 android:id="@+id/imgStatus"
                 android:layout_width="@dimen/today_status_img_size"
                 android:layout_height="@dimen/today_status_img_size"
-                android:layout_margin="@dimen/common_padding_default"
+                android:layout_marginTop="@dimen/common_padding_min"
                 android:importantForAccessibility="no"
-                android:src="@drawable/ic_history_toggle_off"
+                android:src="@drawable/outline_access_time"
                 app:statusTodayImage="@{viewModel.currentWorkDay.status}" />
 
             <ProgressBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/common_padding_default"
+                android:layout_marginTop="@dimen/common_padding_min"
                 app:inProgressVisibility="@{viewModel.inProgress}" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -30,13 +30,13 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when (position) {
                 0 -> {
-                    tab.text = getString(R.string.menu_today)
                     tab.icon = ContextCompat.getDrawable(this, R.drawable.ic_today)
+                    tab.text = getString(R.string.menu_today)
                 }
 
                 1 -> {
+                    tab.icon = ContextCompat.getDrawable(this, R.drawable.outline_history)
                     tab.text = getString(R.string.menu_record)
-                    tab.icon = ContextCompat.getDrawable(this, R.drawable.ic_history)
                 }
             }
         }.attach()
