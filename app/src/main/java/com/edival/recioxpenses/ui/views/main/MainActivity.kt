@@ -23,9 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupTabLayout() {
         binding.viewPager.adapter = ViewPagerAdapter(
-            listOf(TodayFragment(), RecordFragment()),
-            supportFragmentManager,
-            lifecycle
+            listOf(TodayFragment(), RecordFragment()), supportFragmentManager, lifecycle
         )
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when (position) {

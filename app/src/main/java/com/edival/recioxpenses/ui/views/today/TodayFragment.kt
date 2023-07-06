@@ -48,8 +48,7 @@ class TodayFragment : Fragment() {
                 when (resource) {
                     is Resource.Success -> vm.currentWorkDay.value = resource.data
                     is Resource.Error -> view.showSnackBar(
-                        resource.message
-                            ?: ctx.getString(R.string.record_query_error)
+                        resource.message ?: ctx.getString(R.string.record_query_error)
                     )
                 }
             }
@@ -58,8 +57,7 @@ class TodayFragment : Fragment() {
                 when (resource) {
                     is Resource.Success -> ctx.showToast(R.string.today_save_success)
                     is Resource.Error -> view.showSnackBar(
-                        resource.message
-                            ?: ctx.getString(R.string.unknown_error)
+                        resource.message ?: ctx.getString(R.string.unknown_error)
                     )
                 }
             }

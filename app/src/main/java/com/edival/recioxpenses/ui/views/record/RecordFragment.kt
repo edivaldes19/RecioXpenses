@@ -66,8 +66,7 @@ class RecordFragment : Fragment(), OnRecordListener {
                 when (resource) {
                     is Resource.Success -> recordAdapter.submitList(resource.data)
                     is Resource.Error -> view.showSnackBar(
-                        resource.message
-                            ?: ctx.getString(R.string.record_query_error)
+                        resource.message ?: ctx.getString(R.string.record_query_error)
                     )
                 }
             }
@@ -76,8 +75,7 @@ class RecordFragment : Fragment(), OnRecordListener {
                 when (resource) {
                     is Resource.Success -> ctx.showToast(R.string.record_delete_success)
                     is Resource.Error -> view.showSnackBar(
-                        resource.message
-                            ?: ctx.getString(R.string.record_query_error)
+                        resource.message ?: ctx.getString(R.string.record_query_error)
                     )
                 }
             }
